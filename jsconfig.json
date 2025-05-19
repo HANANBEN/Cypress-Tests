@@ -5,6 +5,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src/**/*", "cypress/**/*"],
+  "include": ["src/**/*", "cypress/**/*", "cypress/support/step_definitions"],
   "exclude": ["node_modules"]
 }

@@ -1,21 +1,36 @@
 import { defineConfig } from "cypress";
 import createBundler from "@bahmutov/cypress-esbuild-preprocessor";
 import { createEsbuildPlugin } from "@badeball/cypress-cucumber-preprocessor/esbuild";
-import * as addCucumberPreprocessorPlugin from "@badeball/cypress-cucumber-preprocessor";
+import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-preprocessor";
 
 export default defineConfig({
   e2e: {
-    specPattern: "cypress/e2e/**/*.feature",
-    async setupNodeEvents(on, config) {
-      await addCucumberPreprocessorPlugin.addCucumberPreprocessorPlugin(
-        on,
-        config
-      );
+    specPattern: "cypress/e2e/features/*.feature",
+    supportFile: "cypress/support/e2e.js",
+
+    screenshotsFolder: "cypress/reports/screenshots",
+    videosFolder: "cypress/reports/videos",
+    setupNodeEvents: async (on, config) => {
+      await addCucumberPreprocessorPlugin(on, config, {
+        // This is the JSON output path
+        json: {
+          enabled: true,
+          outputFolder: "cypress/reports/cucumber-json",
+          filePrefix: "cucumber-json",
+        },
+      });
       on(
         "file:preprocessor",
-        createBundler({ plugins: [createEsbuildPlugin(config)] })
+        createBundler({
+          plugins: [createEsbuildPlugin(config)],
+        })
       );
+      console.log("here is the config", config);
       return config;
+    },
+    reporter: "cypress-multi-reporters",
+    reporterOptions: {
+      configFile: "reporter-config.json",
     },
   },
 
@@ -24,4 +39,11 @@ export default defineConfig({
       stepDefinitions: "cypress/support/step_definitions",
     },
   },
+  // reporter: "mochawesome",
+  // reporterOptions: {
+  //   reportDir: "cypress/reports/mochawesome",
+  //   overwrite: false,
+  //   html: true,
+  //   json: true,
+  // },
 });
