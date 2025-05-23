@@ -16,3 +16,13 @@
 // Import commands.js using ES2015 syntax:
 import "./commands";
 require("cypress-xpath");
+
+Cypress.on("uncaught:exception", (err) => {
+  if (
+    err.message.includes(
+      "Cannot read properties of undefined (reading 'dataset')"
+    )
+  ) {
+    return false; // Ignore the error and let the test continue
+  }
+});

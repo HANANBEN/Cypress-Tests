@@ -5,6 +5,10 @@ import { addCucumberPreprocessorPlugin } from "@badeball/cypress-cucumber-prepro
 
 export default defineConfig({
   e2e: {
+    viewportWidth: 1280,
+    viewportHeight: 1000,
+    video: true,
+    chromeWebSecurity: false,
     specPattern: "cypress/e2e/features/*.feature",
     supportFile: "cypress/support/e2e.js",
 
@@ -12,7 +16,6 @@ export default defineConfig({
     videosFolder: "cypress/reports/videos",
     setupNodeEvents: async (on, config) => {
       await addCucumberPreprocessorPlugin(on, config, {
-        // This is the JSON output path
         json: {
           enabled: true,
           outputFolder: "cypress/reports/cucumber-json",
